@@ -1,29 +1,78 @@
+import Image from "next/image";
 import Link from "next/link";
 import { IMAGES } from "@/config/images";
 
 // -------- FETCH HOME PAGE DATA ----------
-async function getHomeData() {
+const FALLBACK_SERVICES = [
+  {
+    title: "Electrical Systems",
+    description: "Safe, compliant installations, upgrades, and maintenance.",
+  },
+  {
+    title: "Telecom Infrastructure",
+    description: "Structured cabling, fiber, and network build-outs.",
+  },
+  {
+    title: "Satellite & AV",
+    description: "Satellite installation, alignment, and support.",
+  },
+];
+
+const FALLBACK_GALLERY = [
+  { image: IMAGES.WORK_PANEL, title: "Panel installation" },
+  { image: IMAGES.WORK_TELECOM, title: "Telecom site build" },
+  { image: IMAGES.WORK_SAT, title: "Satellite installation" },
+];
+
+const FALLBACK_TESTIMONIALS = [
+  {
+    name: "Operations Lead",
+    message: "Clear communication and quality workmanship throughout.",
+  },
+  {
+    name: "Facility Manager",
+    message: "Fast response and professional follow-through on every visit.",
+  },
+];
+
+async function safeFetch(path) {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   try {
-    const base = process.env.NEXT_PUBLIC_BASE_URL;
-
-    const [servicesRes, galleryRes, testiRes] = await Promise.all([
-      fetch(`${base}/api/services`, { cache: "no-store" }),
-      fetch(`${base}/api/gallery`, { cache: "no-store" }),
-      fetch(`${base}/api/testimonials`, { cache: "no-store" }),
-    ]);
-
-    const services = await servicesRes.json();
-    const gallery = await galleryRes.json();
-    const testimonials = await testiRes.json();
-
-    return {
-      services: services.data?.slice(0, 3) || [],
-      gallery: gallery.data?.slice(0, 3) || [],
-      testimonials: testimonials.data?.slice(0, 2) || [],
-    };
-  } catch (err) {
-    return { services: [], gallery: [], testimonials: [] };
+    const response = await fetch(`${base}${path}`, { cache: "no-store" });
+    if (!response.ok) {
+      return null;
+    }
+    return response.json();
+  } catch (error) {
+    return null;
   }
+}
+
+async function getHomeData() {
+  const [servicesRes, galleryRes, testiRes] = await Promise.allSettled([
+    safeFetch("/api/services"),
+    safeFetch("/api/gallery"),
+    safeFetch("/api/testimonials"),
+  ]);
+
+  const services =
+    servicesRes.status === "fulfilled"
+      ? servicesRes.value?.data?.slice(0, 3) || []
+      : [];
+  const gallery =
+    galleryRes.status === "fulfilled"
+      ? galleryRes.value?.data?.slice(0, 3) || []
+      : [];
+  const testimonials =
+    testiRes.status === "fulfilled"
+      ? testiRes.value?.data?.slice(0, 2) || []
+      : [];
+
+  return {
+    services: services.length ? services : FALLBACK_SERVICES,
+    gallery: gallery.length ? gallery : FALLBACK_GALLERY,
+    testimonials: testimonials.length ? testimonials : FALLBACK_TESTIMONIALS,
+  };
 }
 
 export default async function HomePage() {
@@ -33,18 +82,32 @@ export default async function HomePage() {
     <div className="space-y-20">
 
       {/* ---------------- HERO ---------------- */}
-      <section className="bg-blue-600 text-white py-20 px-6 text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Our Engineering Solutions</h1>
-        <p className="text-lg mb-6">
-          Professional electrical, satellite, telecom, and engineering services.
-        </p>
+      <section className="bg-blue-600 text-white py-20 px-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          <div className="text-center lg:text-left">
+            <h1 className="text-4xl font-bold mb-4">Welcome to Our Engineering Solutions</h1>
+            <p className="text-lg mb-6">
+              Professional electrical, satellite, telecom, and engineering services.
+            </p>
 
-        <Link
-          href="/contact"
-          className="bg-white text-blue-600 px-6 py-3 rounded-md font-semibold"
-        >
-          Contact Us
-        </Link>
+            <Link
+              href="/contact"
+              className="inline-block bg-white text-blue-600 px-6 py-3 rounded-md font-semibold"
+            >
+              Contact Us
+            </Link>
+          </div>
+          <div className="relative w-full h-64 sm:h-72 lg:h-80">
+            <Image
+              src={IMAGES.HERO}
+              alt="Engineering team on site"
+              fill
+              className="object-cover rounded-xl shadow-lg"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              priority
+            />
+          </div>
+        </div>
       </section>
 
       {/* ---------------- SERVICES ---------------- */}
@@ -74,12 +137,16 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {gallery.map((img) => (
-              <div key={img._id || img.id} className="rounded overflow-hidden shadow hover:shadow-lg transition">
-                <img
-                  src={img.image}
-                  alt="Gallery item"
-                  className="w-full h-48 object-cover"
-                />
+              <div key={img._id || img.id || img.image} className="rounded overflow-hidden shadow hover:shadow-lg transition">
+                <div className="relative w-full h-48">
+                  <Image
+                    src={img.image}
+                    alt={img.title || "Gallery item"}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 33vw"
+                  />
+                </div>
               </div>
             ))}
           </div>
