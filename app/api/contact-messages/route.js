@@ -25,20 +25,26 @@ export async function POST(request) {
     await connectDB();
 
     const body = await request.json();
-
     const { name, email, phone, service, message } = body;
 
-    if (!name || !email || !phone || !message) {
+    if (!name || !email || !message) {
       return NextResponse.json(
         {
           success: false,
-          error: "Name, email, phone, and message are required",
+          error: "Name, email, and message are required",
         },
         { status: 400 }
       );
     }
 
-    const msg = await ContactMessage.create(body);
+    const msg = await ContactMessage.create({
+      name,
+      email,
+      phone: phone || "",
+      service: service || "other",
+      message,
+      status: "unread",
+    });
 
     return NextResponse.json(
       { success: true, data: msg },

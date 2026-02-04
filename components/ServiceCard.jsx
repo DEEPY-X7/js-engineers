@@ -1,11 +1,12 @@
-export default function ServiceCard({ title, description, image }) {
+export default function ServiceCard({ title, description, image, fallbackImage }) {
+  const displayImage = image || fallbackImage;
   return (
     <div className="bg-white shadow rounded-lg p-6 border hover:shadow-lg transition">
 
       {/* Image (optional) */}
-      {image && (
+      {displayImage && (
         <img
-          src={image}
+          src={displayImage}
           alt={title}
           className="w-full h-40 object-cover rounded mb-4 border"
         />

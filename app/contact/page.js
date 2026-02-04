@@ -1,18 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ContactPage() {
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
+    service: "other",
     message: "",
   });
 
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const res = await fetch("/api/contact");
+        const data = await res.json();
+        if (data.success) {
+          setSettings(data.data);
+        }
+      } catch (err) {
+        console.error("Failed to load contact settings", err);
+      }
+    };
+
+    loadSettings();
+  }, []);
 
   // Submit form
   async function handleSubmit(e) {
@@ -22,7 +40,7 @@ export default function ContactPage() {
     setError("");
 
     try {
-      const res = await fetch("/contact-massages", {
+      const res = await fetch("/api/contact-messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -37,7 +55,7 @@ export default function ContactPage() {
       }
 
       setSuccess("Message sent successfully!");
-      setForm({ name: "", email: "", phone: "", message: "" });
+      setForm({ name: "", email: "", phone: "", service: "other", message: "" });
       setSending(false);
 
     } catch (err) {
@@ -93,6 +111,21 @@ export default function ContactPage() {
           />
         </div>
 
+        {/* Service */}
+        <div>
+          <label className="block mb-1 font-medium">Service</label>
+          <select
+            className="w-full border p-2 rounded"
+            value={form.service}
+            onChange={(e) => setForm({ ...form, service: e.target.value })}
+          >
+            <option value="electrical">Electrical</option>
+            <option value="telecom">Telecom</option>
+            <option value="satellite">Satellite</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
         {/* Message */}
         <div>
           <label className="block mb-1 font-medium">Message</label>
@@ -120,6 +153,42 @@ export default function ContactPage() {
         </button>
 
       </form>
+
+      {settings && (
+        <div className="bg-white shadow p-6 rounded border space-y-3">
+          <h2 className="text-2xl font-semibold">Contact Information</h2>
+          {settings.phone && (
+            <p>
+              <span className="font-medium">Phone:</span> {settings.phone}
+            </p>
+          )}
+          {settings.email && (
+            <p>
+              <span className="font-medium">Email:</span> {settings.email}
+            </p>
+          )}
+          {settings.address && (
+            <p>
+              <span className="font-medium">Address:</span> {settings.address}
+            </p>
+          )}
+          {settings.whatsapp && (
+            <p>
+              <span className="font-medium">WhatsApp:</span> {settings.whatsapp}
+            </p>
+          )}
+          {settings.mapLink && (
+            <a
+              href={settings.mapLink}
+              className="text-blue-600 font-medium hover:underline inline-block"
+              target="_blank"
+              rel="noreferrer"
+            >
+              View on Map →
+            </a>
+          )}
+        </div>
+      )}
     </div>
   );
 }

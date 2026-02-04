@@ -34,6 +34,7 @@ export default function ContactSettingsPage() {
     try {
       const res = await fetch("/api/contact", {
         method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
   async function handleLogin(e) {
@@ -43,13 +43,13 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label className="block mb-1 text-sm font-medium">Username</label>
+            <label className="block mb-1 text-sm font-medium">Email</label>
             <input
-              type="text"
+              type="email"
               className="w-full border p-2 rounded"
-              value={form.username}
+              value={form.email}
               onChange={(e) =>
-                setForm({ ...form, username: e.target.value })
+                setForm({ ...form, email: e.target.value })
               }
               required
             />

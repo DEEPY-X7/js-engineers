@@ -3,6 +3,9 @@
 // Lightweight, no dependencies, production-safe
 // ------------------------------------------------------
 
+import { connectDB } from "@/lib/db";
+import User from "@/models/User";
+
 // Prevent script injection / XSS in text fields
 export function sanitize(input) {
   if (!input || typeof input !== "string") return input;
@@ -69,12 +72,14 @@ export function sanitizeObject(obj) {
 // Verify JWT token (stub function)
 export async function verifyJwt(token) {
   try {
-    // Simple verification - in production use jsonwebtoken library
-    if (!token || typeof token !== 'string') {
+    if (!token || typeof token !== "string") {
       return null;
     }
-    // Basic token validation
-    return { valid: true, token };
+
+    await connectDB();
+    const admin = await User.findOne({ _id: token, role: "admin" }).select("_id");
+
+    return admin ? { valid: true, token } : null;
   } catch (error) {
     return null;
   }
