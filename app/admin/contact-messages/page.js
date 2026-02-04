@@ -27,7 +27,7 @@ const ContactMessagesPage = () => {
   // Handle deleting a contact message
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/contact-massages/${id}`);
+      await axios.delete(`/api/contact-messages/${id}`);
       setContactMessages(contactMessages.filter((message) => message._id !== id)); // Remove the deleted message from the UI
       alert('Contact message deleted successfully!');
     } catch (err) {
@@ -38,7 +38,7 @@ const ContactMessagesPage = () => {
   // Handle marking a contact message as read
   const handleMarkAsRead = async (id) => {
     try {
-      await axios.put(`/api/contact-massages/${id}`, { status: 'read' });
+      await axios.put(`/api/contact-messages/${id}`, { status: 'read' });
       setContactMessages(contactMessages.map((message) => 
         message._id === id ? { ...message, status: 'read' } : message
       ));
@@ -55,39 +55,70 @@ const ContactMessagesPage = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="container">
-      <h1>Contact Messages</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Message</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {contactMessages.map((message) => (
-            <tr key={message._id}>
-              <td>{message.name}</td>
-              <td>{message.email}</td>
-              <td>{message.message}</td>
-              <td>{message.status}</td>
-              <td>
-                <button onClick={() => handleDelete(message._id)}>Delete</button>
-                <button onClick={() => handleMarkAsRead(message._id)}>
-                  Mark as Read
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="container mx-auto space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Contact Messages</h1>
+        <button
+          onClick={() => window.location.href = '/admin/contact-messages/create'}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Add New Contact Message
+        </button>
+      </div>
 
-      <button onClick={() => window.location.href = '/admin/contact-messages/create'}>
-        Add New Contact Message
-      </button>
+      <div className="bg-white shadow rounded-lg overflow-hidden">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-50 border-b">
+            <tr>
+              <th className="p-3 text-left">Name</th>
+              <th className="p-3 text-left">Email</th>
+              <th className="p-3 text-left">Phone</th>
+              <th className="p-3 text-left">Service</th>
+              <th className="p-3 text-left">Message</th>
+              <th className="p-3 text-left">Status</th>
+              <th className="p-3 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {contactMessages.map((message) => (
+              <tr key={message._id} className="border-b last:border-0">
+                <td className="p-3 font-medium">{message.name}</td>
+                <td className="p-3">{message.email}</td>
+                <td className="p-3">{message.phone || "-"}</td>
+                <td className="p-3 capitalize">{message.service || "other"}</td>
+                <td className="p-3">{message.message}</td>
+                <td className="p-3">
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      message.status === "read"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}
+                  >
+                    {message.status || "unread"}
+                  </span>
+                </td>
+                <td className="p-3 space-x-2">
+                  <button
+                    onClick={() => handleDelete(message._id)}
+                    className="text-red-600 hover:underline"
+                  >
+                    Delete
+                  </button>
+                  {message.status !== "read" && (
+                    <button
+                      onClick={() => handleMarkAsRead(message._id)}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Mark as Read
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

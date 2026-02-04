@@ -3,27 +3,25 @@ import mongoose from 'mongoose';
 // Define the schema for the ContactSettings model
 const contactSettingsSchema = new mongoose.Schema(
   {
-    businessEmail: {
+    phone: {
       type: String,
-      required: [true, 'Business email is required'],
-      match: [
-        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
-        'Please provide a valid email address',
-      ],
+      trim: true,
     },
-    phoneNumber: {
+    email: {
       type: String,
-      required: [true, 'Phone number is required'],
+      trim: true,
     },
-    businessHours: {
+    address: {
       type: String,
-      required: [true, 'Business hours are required'],
-      enum: ['9am-5pm', '10am-6pm', '24/7'], // Example business hours
+      trim: true,
     },
-    contactMessageStatus: {
+    whatsapp: {
       type: String,
-      enum: ['enabled', 'disabled'],
-      default: 'enabled',
+      trim: true,
+    },
+    mapLink: {
+      type: String,
+      trim: true,
     },
   },
   { timestamps: true } // Automatically add createdAt and updatedAt

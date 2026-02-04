@@ -11,7 +11,7 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (!data.success) {
-        setError(data.error || "Invalid credentials");
+        setError(data.message || "Invalid credentials");
         return;
       }
 

@@ -3,7 +3,9 @@
 // Protects all /admin routes using JWT verification
 // ------------------------------------------------------
 
-import "../globals.css";import { cookies } from "next/headers";import { verifyJwt } from "@/utils/security";
+import "../globals.css";
+import { cookies } from "next/headers";
+import { verifyJwt } from "@/utils/security";
 import { redirect } from "next/navigation";
 
 // HTML Skeleton for Admin Panel
@@ -42,7 +44,7 @@ export default async function AdminLayout({ children }) {
             <a href="/admin/services" className="hover:text-blue-600">Services</a>
             <a href="/admin/gallery" className="hover:text-blue-600">Gallery</a>
             <a href="/admin/testimonials" className="hover:text-blue-600">Testimonials</a>
-            <a href="/admin/messages" className="hover:text-blue-600">Messages</a>
+            <a href="/admin/contact-messages" className="hover:text-blue-600">Messages</a>
             <a href="/admin/appointments" className="hover:text-blue-600">Appointments</a>
           </nav>
         </aside>

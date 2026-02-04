@@ -14,7 +14,6 @@ const ContactMessageSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true,
       trim: true,
     },
     service: {
@@ -26,6 +25,11 @@ const ContactMessageSchema = new mongoose.Schema(
     message: {
       type: String,
       required: true,
+    },
+    status: {
+      type: String,
+      enum: ["unread", "read"],
+      default: "unread",
     },
   },
   { timestamps: true }
