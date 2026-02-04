@@ -1,0 +1,250 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* -----------------------------------------
+   GLOBAL RESET + BASE DESIGN
+------------------------------------------*/
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  scroll-behavior: smooth;
+  background-color: #f9fafb; /* light gray */
+  color: #111827; /* soft black */
+}
+
+/* Make images smooth */
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Remove tap highlight (Mobile UX improvement) */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* -----------------------------------------
+   SCROLLBAR STYLING (Modern Look)
+------------------------------------------*/
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e5e7eb;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* -----------------------------------------
+   LINKS
+------------------------------------------*/
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* -----------------------------------------
+   FORM ELEMENTS
+------------------------------------------*/
+
+input,
+textarea,
+select {
+  outline: none;
+  transition: all 0.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #2563eb !important; /* blue-600 */
+  box-shadow: 0 0 6px rgba(37, 99, 235, 0.3);
+}
+
+/* -----------------------------------------
+   BUTTON DEFAULT BEHAVIOR
+------------------------------------------*/
+
+button {
+  transition: 0.2s ease;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* -----------------------------------------
+   LAYOUT HELPERS
+------------------------------------------*/
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.input-container {
+  margin-bottom: 16px;
+}
+
+.input-label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.required {
+  color: red;
+}
+
+.input-field {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-error {
+  border-color: red;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+
+.uploader-container {
+  margin-bottom: 16px;
+}
+
+.uploader-label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.required {
+  color: red;
+}
+
+.uploader-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-error {
+  border-color: red;
+}
+
+.file-preview {
+  margin-top: 16px;
+}
+
+.preview-image {
+  max-width: 200px;
+  max-height: 200px;
+  object-fit: cover;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.table-container {
+  margin-top: 20px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+
+.admin-table th {
+  background-color: #f4f4f4;
+}
+
+button {
+  padding: 8px 12px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #f0f0f0;
+}
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global Reset & Layout Tweaks */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  scroll-behavior: smooth;
+  background-color: #ffffff;
+  color: #111827; /* slate-900 */
+}
+
+/* Prevent layout shift in admin forms & tables */
+input,
+textarea,
+select,
+button {
+  outline: none;
+}
+
+/* Smooth fonts across devices */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utility: Container max width (global) */
+.wrapper {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
